@@ -24,14 +24,20 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 if ! command -v brew >/dev/null 2>&1; then
-  printf '%s\n' "Homebrew is missing. Downloading the official installer for review."
+  # Pin the installer to a reviewed Homebrew/install Git commit, not HEAD.
+  # Updating this commit is an explicit change reviewed in this repository.
+  HOMEBREW_INSTALL_COMMIT="09c62fc577ec170172b0a184060f141a2c622dc1"
+  HOMEBREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/$HOMEBREW_INSTALL_COMMIT/install.sh"
+
+  printf '%s\n' "Homebrew is missing. Downloading a commit-pinned official installer."
   installer="$(mktemp "${TMPDIR:-/tmp}/homebrew-install.XXXXXX")"
   trap 'rm -f "$installer"' EXIT
   curl --fail --location --silent --show-error \
-    --output "$installer" \
-    https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+    --output "$installer" "$HOMEBREW_INSTALL_URL"
+  printf 'Installer source: %s\n' "$HOMEBREW_INSTALL_URL"
   printf 'Downloaded installer: %s\n' "$installer"
-  printf '%s\n' "The installer is not pinned or checksum-verified. Review it before continuing."
+  printf '%s\n' "Review the downloaded installer before executing it."
+  printf '%s\n' "Note: This version pins the source commit but does not yet verify a SHA-256 checksum."
   printf '%s\n' "Run the downloaded Homebrew installer? [y/N] "
   read -r answer
   case "$answer" in
