@@ -100,7 +100,12 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 ## Planned work
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
-- Add tmux, mise, Neovim and cross-platform Stow packages.
+- TODO: install CLI tools, preferring mise and falling back to Homebrew only when mise can't provide a tool:
+  - [ ] **mise** via the Brewfile (`brew "mise"`), activated in the shell.
+  - [ ] **lazygit** via mise (check with `mise registry | grep lazygit`); otherwise Brewfile.
+  - [ ] **tmux** via mise if a prebuilt backend exists (check `mise registry | grep tmux`; source builds need extra dependencies); otherwise Brewfile.
+  - [ ] Track mise tool versions in a Stow package (`~/.config/mise/config.toml`).
+- Add Neovim and cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 
 ## 7. Amethyst and native macOS Spaces (manual setup)
