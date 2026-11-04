@@ -32,7 +32,7 @@ ghostty/.config/ghostty/config
 - Read the bootstrap and Brewfile before running them.
 - Never commit private SSH keys, access tokens, passwords, or recovery codes.
 - Use one SSH key per machine.
-- The Homebrew installer is downloaded to a temporary file, not piped directly to a shell. Review it before accepting execution. **The downloaded installer is not pinned to a commit or verified against a fixed checksum in this initial version.**
+- The Homebrew installer is downloaded from a pinned official Git commit to a temporary file, not piped directly to a shell. Review it before accepting execution. **A fixed SHA-256 checksum is not yet verified.**
 - The bootstrap does not change macOS System Integrity Protection (SIP).
 - Stow checks for conflicts and stops instead of overwriting existing dotfiles.
 
