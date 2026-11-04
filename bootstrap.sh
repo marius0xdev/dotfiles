@@ -24,9 +24,10 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 if ! command -v brew >/dev/null 2>&1; then
-  # Pin the installer to a reviewed Homebrew/install Git commit, not HEAD.
-  # Updating this commit is an explicit change reviewed in this repository.
+  # Pin the official Homebrew installer to a Git commit and an expected SHA-256.
+  # When updating, independently verify and change both values together.
   HOMEBREW_INSTALL_COMMIT="09c62fc577ec170172b0a184060f141a2c622dc1"
+  HOMEBREW_INSTALL_SHA256="5f333bbe53bc490e51e7ccb1df8779b3dd6ee73a1a7379efda216edb08ccb148"
   HOMEBREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/$HOMEBREW_INSTALL_COMMIT/install.sh"
 
   printf '%s\n' "Homebrew is missing. Downloading a commit-pinned official installer."
@@ -34,10 +35,15 @@ if ! command -v brew >/dev/null 2>&1; then
   trap 'rm -f "$installer"' EXIT
   curl --fail --location --silent --show-error \
     --output "$installer" "$HOMEBREW_INSTALL_URL"
+  # Never execute the installer unless its bytes match the pinned digest.
+  actual_sha256="$(shasum -a 256 "$installer" | awk '{print $1}')"
+  if [ "$actual_sha256" != "$HOMEBREW_INSTALL_SHA256" ]; then
+    printf '%s\n' "ERROR: Homebrew installer SHA-256 mismatch. Aborting." >&2
+    printf 'Expected: %s\nActual:   %s\n' "$HOMEBREW_INSTALL_SHA256" "$actual_sha256" >&2
+    exit 1
+  fi
+  printf '%s\n' "Homebrew installer SHA-256 verified."
   printf 'Installer source: %s\n' "$HOMEBREW_INSTALL_URL"
-  printf 'Downloaded installer: %s\n' "$installer"
-  printf '%s\n' "Review the downloaded installer before executing it."
-  printf '%s\n' "Note: This version pins the source commit but does not yet verify a SHA-256 checksum."
   printf '%s\n' "Run the downloaded Homebrew installer? [y/N] "
   read -r answer
   case "$answer" in
