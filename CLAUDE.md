@@ -1,0 +1,33 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this repo is
+
+macOS dotfiles (Omarchy/Arch support is planned, not implemented). There is no build or test suite; `bootstrap.sh` is the single entry point and is meant to be re-runnable.
+
+## Commands
+
+```sh
+bash ./bootstrap.sh                                   # full setup: Homebrew, brew bundle, stow
+bash -n bootstrap.sh                                  # syntax check the bootstrap
+brew bundle check --file=Brewfile                     # are all Brewfile entries installed?
+stow --dir=. --target="$HOME" --simulate --verbose=1 <package>   # dry-run linking one package
+```
+
+## Architecture
+
+- **Brewfile** declares every installed tool/app (formulae and casks), each with a comment explaining why it's there.
+- **Stow packages**: each top-level directory other than `docs/` (e.g. `ghostty/`, `amethyst/`) mirrors paths relative to `$HOME`. `ghostty/.config/ghostty/config` → `~/.config/ghostty/config`; `amethyst/.amethyst.yml` → `~/.amethyst.yml`. A new package must be added to **both** `stow` lines at the end of `bootstrap.sh` (the `--simulate` dry run and the real run).
+- **bootstrap.sh** order: require macOS + Command Line Tools → find or install Homebrew → persist `brew shellenv` in `~/.zprofile` (idempotently) → `brew bundle` → stow dry run → stow.
+- **docs/macos-setup.md** holds manual steps that are deliberately not automated (SSH key, Git identity, Accessibility permission, Mission Control/Spaces setup). Keep it, the README and its "Repository layout" block in sync with changes.
+
+## Conventions and constraints
+
+- `bootstrap.sh` must stay compatible with macOS system Bash 3.2 (no associative arrays, `mapfile`, `${var,,}`, etc.) and runs with `set -euo pipefail`.
+- The Homebrew installer is pinned to a commit **and** a SHA-256; update both together, only after independent verification. Never switch to piping a remote script to a shell.
+- Never overwrite existing user config: rely on Stow's conflict detection rather than `--adopt`/forcing.
+- Don't change the login shell, disable SIP, or add private-API window-management tools. Amethyst tiles windows on native macOS Spaces; Space creation and app-to-Space assignment stay manual.
+- Amethyst keys in `~/.amethyst.yml` override its Preferences UI; Amethyst must be restarted to pick up changes.
+- Repo Git identity is `marius0xdev <marius0x@gmail.com>` (set locally, not globally); the remote is reached via the `github-marius0xdev` SSH host alias.
+- Docs must not claim a feature works until it is tested (e.g. `Option + 1..9` Space switching is explicitly not implemented yet).
