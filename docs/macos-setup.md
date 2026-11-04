@@ -91,7 +91,7 @@ bash ./bootstrap.sh
 
 The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code, and links Ghostty's configuration using GNU Stow. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
-Some future applications may require macOS Accessibility permissions, which must be granted in System Settings after reviewing the request. This initial version does not install a window manager.
+Amethyst requires macOS Accessibility permission, which must be granted manually in System Settings after reviewing the request.
 
 ## Recovery and backup
 
@@ -99,6 +99,25 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 
 ## Planned work
 
-- Choose AeroSpace or Amethyst and configure keyboard-driven workspaces.
+- Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
 - Add tmux, mise, Neovim and cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
+
+## 7. Amethyst and native macOS Spaces (manual setup)
+
+The Brewfile installs **Amethyst**. It tiles windows on native macOS Spaces; it does **not** automatically create Spaces or assign Chrome and Slack to numbered desktops. Those steps remain manual and are intentionally documented here.
+
+1. In **System Settings > Desktop & Dock > Mission Control**, turn off **Automatically rearrange Spaces based on most recent use**. This prevents macOS from changing the order of numbered desktops. Alternatively, after understanding the Dock restart: `defaults write com.apple.dock workspaces-auto-swoosh -bool NO && killall Dock`.
+2. Open **Mission Control** with `Control + Up Arrow`, then use the **+** button at the top to create a total of **nine desktops**. If multiple displays are attached, check which display owns the Spaces.
+3. Launch **Amethyst** from Applications/Spotlight. Grant **System Settings > Privacy & Security > Accessibility > Amethyst** permission so it can arrange windows. On a managed work Mac, follow IT policy for granting this permission.
+4. In **System Settings > Keyboard > Keyboard Shortcuts > Mission Control**, enable **Switch to Desktop 1** through **Switch to Desktop 9**, if available. Assign the native macOS shortcuts there; test them before customizing further. macOS may not expose every shortcut until the corresponding desktop exists.
+5. On **Desktop 1**, open Chrome, right-click its Dock icon and choose **Options > Assign To > This Desktop**. Repeat with Slack on **Desktop 7**. These assignments are native macOS preferences, not managed by Amethyst.
+6. Test Amethyst by opening two ordinary windows on one desktop. Its default `Option + Shift + Space` cycles tiling layouts. Its default `Control + Option + Shift + [number]` can move the focused window to a numbered Space; check Amethyst's current Shortcuts preferences for the exact bindings.
+
+### Known limitations and future keyboard work
+
+- Amethyst controls **window tiling**; Mission Control/macOS controls **Space creation, switching and app assignment**.
+- Our desired `Option + 1` ... `Option + 9` workspace-switching bindings are **not yet implemented**. Do not claim they work until a tested shortcut mechanism is added. macOS's native Control-number shortcuts are the initial fallback.
+- Some shortcuts can conflict with typing special characters on Polish keyboard layouts; choose bindings after testing the physical keyboard.
+- Do not disable SIP or install experimental private-API tools just to automate native Spaces.
+- An Amethyst YAML configuration can be added via Stow later, after verifying the preferred layout and shortcut settings in the app.
