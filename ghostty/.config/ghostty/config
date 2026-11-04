@@ -1,0 +1,6 @@
+# Ghostty terminal appearance.
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+theme = Catppuccin Mocha
+window-padding-x = 10
+window-padding-y = 8
