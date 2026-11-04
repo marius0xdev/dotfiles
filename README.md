@@ -18,6 +18,12 @@ The script installs Homebrew if necessary (with an interactive confirmation), in
 
 **Initial scope:** Ghostty, JetBrainsMono Nerd Font, Catppuccin Mocha, GNU Stow, and Bash 5 installed alongside the macOS system Bash. The login shell remains unchanged. A window manager, Neovim, tmux, mise, and Omarchy integration are future additions.
 
+## Manual macOS settings
+
+Some preferences have no supported command-line setting and are set by hand once per Mac:
+
+- **Display scaling:** System Settings > Displays > select the built-in display > **More Space**. The resolution shown (e.g. `1800 × 1169`) depends on the Mac model.
+
 ## Repository layout
 
 ```text
