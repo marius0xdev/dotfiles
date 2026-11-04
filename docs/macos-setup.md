@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (without a fixed SHA-256 check yet), runs `brew bundle` including Claude Code, and links Ghostty's configuration using GNU Stow. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code, and links Ghostty's configuration using GNU Stow. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 Some future applications may require macOS Accessibility permissions, which must be granted in System Settings after reviewing the request. This initial version does not install a window manager.
 
