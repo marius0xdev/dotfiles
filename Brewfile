@@ -15,3 +15,7 @@ cask "font-jetbrains-mono-nerd-font"
 # Claude Code is Anthropic's terminal-based AI coding assistant.
 # The stable Homebrew cask is used instead of the latest release channel.
 cask "claude-code"
+
+# Amethyst automatically tiles windows within native macOS Spaces.
+# Unlike AeroSpace, it does not replace macOS Spaces with virtual workspaces.
+cask "amethyst"
