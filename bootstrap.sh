@@ -75,7 +75,7 @@ brew bundle --file="$ROOT/Brewfile"
 
 # Dry-run first. Stow aborts on conflicts instead of overwriting user files.
 mkdir -p "$HOME/.config"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty
-stow --dir="$ROOT" --target="$HOME" ghostty
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst
 
 printf '\n%s\n' "Bootstrap complete. Open Ghostty to see the configured theme."
