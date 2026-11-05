@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship and zsh configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Starship, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile` and makes `~/.zshrc` load Starship and the repo's zsh settings (`~/.config/zsh/dotfiles.zsh`: aliases, completion); open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship, zsh and Atuin configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Starship, Atuin, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile` and makes `~/.zshrc` load Starship and the repo's zsh settings (`~/.config/zsh/dotfiles.zsh`: aliases, completion); open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 ### CLI tools: mise first, Homebrew as fallback
 
@@ -135,10 +135,18 @@ Installed via mise; `starship/.config/starship.toml` is [Omarchy's prompt](https
 `zsh/.config/zsh/dotfiles.zsh` (Stow → `~/.config/zsh/dotfiles.zsh`) is sourced from `~/.zshrc` and holds the repo-managed shell settings:
 
 - `v` → `nvim`, `t` → `tmux`
-- Vi mode on the command line (`set -o vi`): starts in insert mode; `Escape` (Caps Lock) switches to normal mode after 10 ms (`KEYTIMEOUT=1`); `Ctrl + R` history search still works in both modes. Claude Code has its own vim mode: run `/config` and set **Editor mode** to vim (stored in Claude Code's own config, not in this repo).
+- Vi mode on the command line (`set -o vi`): starts in insert mode; `Escape` (Caps Lock) switches to normal mode after 10 ms (`KEYTIMEOUT=1`); `Ctrl + R` opens Atuin (below) in both modes, falling back to zsh's own history search if Atuin is missing. Claude Code has its own vim mode: run `/config` and set **Editor mode** to vim (stored in Claude Code's own config, not in this repo).
 - Tab completion via zsh's built-in `compinit` (skipped if `~/.zshrc` already initialised it, e.g. Oh My Zsh). Aliases complete like their command, so `t <Tab>` completes tmux subcommands (`t attach -t <Tab>` lists sessions).
 
 Add further shell settings there rather than to `~/.zshrc`.
+
+### Atuin shell history
+
+[Atuin](https://atuin.sh) (via mise) stores shell history in a local SQLite database with each command's directory, exit code, duration and session. `Ctrl + R` opens its fuzzy search; press `Ctrl + R` again to cycle the filter (global, host, session, directory). `Enter` runs the selected command, `Tab` puts it on the command line for editing. The Up arrow is left to zsh (`--disable-up-arrow`).
+
+`atuin/.config/atuin/config.toml` keeps it **local-only**: no sync and no update checks to atuin.sh (`auto_sync = false`, `update_check = false`); don't run `atuin register`/`login` on a work Mac without checking company policy. Commands that look like secrets (AWS keys, GitHub tokens, …) are never saved.
+
+One-time, after the first bootstrap: import the existing zsh history with `atuin import auto`.
 
 ### Caps Lock as Escape
 

@@ -14,9 +14,16 @@ fi
 set -o vi
 # Switch to normal mode 10ms after Escape instead of zsh's default 400ms.
 KEYTIMEOUT=1
-# zsh's vi insert keymap doesn't bind Ctrl+R; keep incremental history search.
+# zsh's vi insert keymap doesn't bind Ctrl+R; keep incremental history search
+# as a fallback when Atuin isn't installed.
 bindkey -M viins '^R' history-incremental-search-backward
 bindkey -M vicmd '^R' history-incremental-search-backward
+
+# Atuin replaces Ctrl+R with its searchable history (after vi mode, so it binds
+# the vi keymaps). The Up arrow keeps zsh's normal history navigation.
+if command -v atuin >/dev/null; then
+  eval "$(atuin init zsh --disable-up-arrow)"
+fi
 
 # Aliases
 alias v='nvim'
