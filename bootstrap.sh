@@ -86,15 +86,21 @@ fi
 # ~/.config/nvim is deliberately not pre-created: Stow links the whole
 # directory, so lazy.nvim writes lazy-lock.json into the repo for committing.
 # Pre-create lazygit's macOS config dir so its state.yml stays out of the repo.
-mkdir -p "$HOME/.config/mise" "$HOME/Library/Application Support/lazygit"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship
-stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship
+mkdir -p "$HOME/.config/mise" "$HOME/.config/zsh" "$HOME/Library/Application Support/lazygit"
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship zsh
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship zsh
 
 # Install the tools declared in ~/.config/mise/config.toml.
 "$mise_executable" install
 
+# Load the repo's zsh settings (aliases, completion) from the existing ~/.zshrc.
+zsh_line='[ -r "$HOME/.config/zsh/dotfiles.zsh" ] && source "$HOME/.config/zsh/dotfiles.zsh"'
+if ! grep -Fqx "$zsh_line" "$HOME/.zshrc" 2>/dev/null; then
+  printf '\n%s\n' '# dotfiles zsh settings' "$zsh_line" >> "$HOME/.zshrc"
+fi
+
 # Enable the Starship prompt in interactive zsh. Appended (not stowed) so the
-# existing ~/.zshrc is kept; it must stay the last prompt setup in that file.
+# existing ~/.zshrc is kept; it must come after any other prompt setup there.
 starship_line='command -v starship >/dev/null && eval "$(starship init zsh)"'
 if ! grep -Fqx "$starship_line" "$HOME/.zshrc" 2>/dev/null; then
   printf '\n%s\n' '# Starship prompt' "$starship_line" >> "$HOME/.zshrc"
