@@ -83,9 +83,11 @@ fi
 
 # Dry-run first. Stow aborts on conflicts instead of overwriting user files.
 # Pre-create ~/.config/mise so Stow links only config.toml, not the directory.
+# ~/.config/nvim is deliberately not pre-created: Stow links the whole
+# directory, so lazy.nvim writes lazy-lock.json into the repo for committing.
 mkdir -p "$HOME/.config/mise"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise
-stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim
 
 # Install the tools declared in ~/.config/mise/config.toml.
 "$mise_executable" install
