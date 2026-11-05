@@ -110,6 +110,16 @@ done
 
 When migrating from a Homebrew-installed `gh`, run the loop above after `bash ./bootstrap.sh`, then `brew uninstall gh`, and check that `command -v gh` shows the mise shim in a new terminal.
 
+#### `gh` inside Claude Code's sandbox
+
+Claude Code runs shell commands in a macOS sandbox whose default network isolation blocks the system certificate-trust service, so `gh` (and other Go programs) fail with `tls: failed to verify certificate: x509: OSStatus -26276`. To let `gh` work there, add this to `~/.claude/settings.json` (merge it into the existing JSON object):
+
+```json
+  "sandbox": {
+    "enableWeakerNetworkIsolation": true
+  }
+```
+
 Amethyst requires macOS Accessibility permission, which must be granted manually in System Settings after reviewing the request.
 
 ### tmux (Omarchy-style)
