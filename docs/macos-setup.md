@@ -93,7 +93,7 @@ The script downloads a commit-pinned Homebrew installer if missing (with SHA-256
 
 ### CLI tools: mise first, Homebrew as fallback
 
-CLI tools are installed by mise (`mise/.config/mise/config.toml`); Homebrew installs mise itself, GUI apps (casks), and only those CLI tools mise can't provide. Add a tool with `mise use -g <tool>@latest` (Stow links the config into the repo, so the change shows up in `git diff`); check availability with `mise registry <tool>`.
+CLI tools are installed by mise (`mise/.config/mise/config.toml`); Homebrew installs mise itself, GUI apps (casks), and only those CLI tools mise can't provide. Versions are pinned exactly (never `latest`) so every machine gets the same, tested tools. Add a tool with an explicit version, e.g. `mise use -g lazygit@0.66.2` (Stow links the config into the repo, so the change shows up in `git diff`); check availability with `mise registry <tool>`.
 
 ### GitHub CLI authentication and Git credential helper
 
@@ -120,7 +120,7 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
 - Add tmux and lazygit configuration (both are installed via mise, with default settings for now).
-- Consider pinning mise tool versions instead of `latest`.
+- TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge).
 - Add Neovim and cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 

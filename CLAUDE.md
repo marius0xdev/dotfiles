@@ -17,7 +17,7 @@ stow --dir=. --target="$HOME" --simulate --verbose=1 <package>   # dry-run linki
 
 ## Architecture
 
-- **Tool installation split:** CLI tools go in `mise/.config/mise/config.toml` (installed by `mise install`); the **Brewfile** holds mise itself, GUI casks, and only CLI tools mise can't provide (check `mise registry <tool>` first). Each Brewfile entry has a comment explaining why it's there.
+- **Tool installation split:** CLI tools go in `mise/.config/mise/config.toml` (installed by `mise install`); the **Brewfile** holds mise itself, GUI casks, and only CLI tools mise can't provide (check `mise registry <tool>` first). mise versions are pinned exactly, never `latest`: reliability over freshness. Each Brewfile entry has a comment explaining why it's there.
 - **Stow packages**: each top-level directory other than `docs/` (e.g. `ghostty/`, `amethyst/`) mirrors paths relative to `$HOME`. `ghostty/.config/ghostty/config` → `~/.config/ghostty/config`; `amethyst/.amethyst.yml` → `~/.amethyst.yml`. A new package must be added to **both** `stow` lines at the end of `bootstrap.sh` (the `--simulate` dry run and the real run).
 - **bootstrap.sh** order: require macOS + Command Line Tools → find or install Homebrew → persist `brew shellenv` in `~/.zprofile` (idempotently) → `brew bundle` → persist `mise activate zsh --shims` in `~/.zprofile` (after Homebrew, so mise tools win) → stow dry run → stow → `mise install`.
 - `gh` is mise-managed; Git's HTTPS credential helper must point at the stable shim `~/.local/share/mise/shims/gh`, not a versioned install path (see `docs/macos-setup.md`).
