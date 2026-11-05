@@ -1,0 +1,10 @@
+# Atuin shell history (installed via mise). Only non-default settings are set;
+# see https://github.com/atuinsh/atuin/blob/v18.23.0/crates/atuin-client/config.toml
+
+# Local-only: no history sync and no update-check requests to atuin.sh.
+auto_sync = false
+update_check = false
+
+# Follow zsh's vi mode: search starts in vim-insert from insert mode and in
+# vim-normal from normal mode.
+keymap_mode = "auto"

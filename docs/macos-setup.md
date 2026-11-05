@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship and zsh configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Starship, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile` and makes `~/.zshrc` load Starship and the repo's zsh settings (`~/.config/zsh/dotfiles.zsh`: aliases, completion); open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship, zsh and Atuin configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Starship, Atuin, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile` and makes `~/.zshrc` load Starship and the repo's zsh settings (`~/.config/zsh/dotfiles.zsh`: aliases, completion); open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 ### CLI tools: mise first, Homebrew as fallback
 
@@ -130,14 +130,23 @@ Installed via mise; `lazygit/Library/Application Support/lazygit/config.yml` (ma
 
 Installed via mise; `starship/.config/starship.toml` is [Omarchy's prompt](https://github.com/omacom/omarchy/blob/quattro/config/starship.toml) (directory, git branch and status, cyan `❯`). The bootstrap appends `command -v starship >/dev/null && eval "$(starship init zsh)"` to the end of the existing `~/.zshrc` (the file itself is not managed by this repo). If `~/.zshrc` also sets a prompt theme (e.g. Oh My Zsh's `ZSH_THEME` or Powerlevel10k), set it to empty/remove it so the two don't fight; Starship's line must come after any other prompt setup.
 
-### zsh aliases and completion
+### zsh aliases, completion and vi mode
 
 `zsh/.config/zsh/dotfiles.zsh` (Stow → `~/.config/zsh/dotfiles.zsh`) is sourced from `~/.zshrc` and holds the repo-managed shell settings:
 
 - `v` → `nvim`, `t` → `tmux`
+- Vi mode on the command line (`set -o vi`): starts in insert mode; `Escape` (Caps Lock) switches to normal mode after 10 ms (`KEYTIMEOUT=1`); `Ctrl + R` opens Atuin (below) in both modes, falling back to zsh's own history search if Atuin is missing. Claude Code has its own vim mode: run `/config` and set **Editor mode** to vim (stored in Claude Code's own config, not in this repo).
 - Tab completion via zsh's built-in `compinit` (skipped if `~/.zshrc` already initialised it, e.g. Oh My Zsh). Aliases complete like their command, so `t <Tab>` completes tmux subcommands (`t attach -t <Tab>` lists sessions).
 
 Add further shell settings there rather than to `~/.zshrc`.
+
+### Atuin shell history
+
+[Atuin](https://atuin.sh) (via mise) stores shell history in a local SQLite database with each command's directory, exit code, duration and session. `Ctrl + R` opens its fuzzy search; press `Ctrl + R` again to cycle the filter (global, host, session, directory). `Enter` runs the selected command, `Tab` puts it on the command line for editing. The Up arrow is left to zsh (`--disable-up-arrow`).
+
+`atuin/.config/atuin/config.toml` keeps it **local-only**: no sync and no update checks to atuin.sh (`auto_sync = false`, `update_check = false`); don't run `atuin register`/`login` on a work Mac without checking company policy. Commands that look like secrets (AWS keys, GitHub tokens, …) are never saved.
+
+One-time, after the first bootstrap: import the existing zsh history with `atuin import auto`.
 
 ### Caps Lock as Escape
 
@@ -166,7 +175,6 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 - TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge). Consider its `lazy` manager for `lazy-lock.json` too.
 - TODO: **tmux dev session layout**: a new session automatically opens 5 windows: `nvim`, `lazygit`, `zsh`, `k9s` (or its replacement, see below), `claude`. Decide between a small shell function/script and a tmux hook, and keep it working with `detach-on-destroy off` and Omarchy's `Option + 1..5` window keys.
 - TODO: **k9s vs [sofka](https://github.com/nklmilojevic/sofka)**: analyse before installing either (features, speed claims, maturity/maintenance, license, mise availability), then pin the chosen one via mise. k9s is the current tool.
-- TODO: **zsh vi mode**: enable vi keybindings (`bindkey -v`) with a short `KEYTIMEOUT`; check it doesn't break existing shortcuts (e.g. `Ctrl + R` history search) in `zsh/.config/zsh/dotfiles.zsh`.
 - Add cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 

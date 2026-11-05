@@ -82,13 +82,14 @@ if ! grep -Fqx "$mise_line" "$HOME/.zprofile" 2>/dev/null; then
 fi
 
 # Dry-run first. Stow aborts on conflicts instead of overwriting user files.
-# Pre-create ~/.config/mise so Stow links only config.toml, not the directory.
+# Pre-create ~/.config/{mise,zsh,atuin} so Stow links only the files, not the
+# directories (the apps may write other files there).
 # ~/.config/nvim is deliberately not pre-created: Stow links the whole
 # directory, so lazy.nvim writes lazy-lock.json into the repo for committing.
 # Pre-create lazygit's macOS config dir so its state.yml stays out of the repo.
-mkdir -p "$HOME/.config/mise" "$HOME/.config/zsh" "$HOME/Library/Application Support/lazygit"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship zsh
-stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship zsh
+mkdir -p "$HOME/.config/mise" "$HOME/.config/zsh" "$HOME/.config/atuin" "$HOME/Library/Application Support/lazygit"
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship zsh atuin
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship zsh atuin
 
 # Install the tools declared in ~/.config/mise/config.toml.
 "$mise_executable" install
