@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux and Neovim configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile`; open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim and lazygit configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile`; open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 ### CLI tools: mise first, Homebrew as fallback
 
@@ -120,7 +120,11 @@ Amethyst requires macOS Accessibility permission, which must be granted manually
 - `Control + Option + arrows`: focus pane; `Control + Option + Shift + arrows`: resize pane
 - `Option + 1..9`: switch window; `Option + Left/Right`: previous/next window; `Option + Up/Down`: previous/next session
 
-These overlap with keys considered for macOS/Amethyst (`Option + 1..9` for Spaces, Amethyst's `Control + Option + Shift` modifier); whichever app grabs a key globally wins, so test them together before changing either side.
+Spaces are switched with `Command + 1..9`, so tmux's `Option + 1..9` doesn't clash with them. The resize keys share Amethyst's `Control + Option + Shift` modifier; whichever app grabs a key globally wins, so test them together before changing either side.
+
+### lazygit
+
+Installed via mise; `lazygit/Library/Application Support/lazygit/config.yml` (macOS's lazygit config path) only sets the Catppuccin Mocha theme; otherwise defaults, like Omarchy. Start it with `lazygit` in a repo, or `Space g g` inside LazyVim. lazygit creates an empty `config.yml` on its first run; if Stow reports a conflict for it, delete that empty file and rerun the bootstrap.
 
 ### Neovim (LazyVim, Omarchy-style)
 
@@ -133,7 +137,6 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 ## Planned work
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
-- Add lazygit configuration (installed via mise, default settings for now).
 - TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge). Consider its `lazy` manager for `lazy-lock.json` too.
 - Add cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
@@ -152,7 +155,7 @@ The Brewfile installs **Amethyst**. It tiles windows on native macOS Spaces; it 
 ### Known limitations and future keyboard work
 
 - Amethyst controls **window tiling**; Mission Control/macOS controls **Space creation, switching and app assignment**.
-- Our desired `Option + 1` ... `Option + 9` workspace-switching bindings are **not yet implemented**. Do not claim they work until a tested shortcut mechanism is added. macOS's native Control-number shortcuts are the initial fallback.
+- Spaces are switched with `Command + 1..9`, assigned in **System Settings > Keyboard > Keyboard Shortcuts > Mission Control**. macOS handles these before apps, so app shortcuts on `Command + number` (e.g. tab switching in Ghostty or Chrome) no longer fire.
 - Some shortcuts can conflict with typing special characters on Polish keyboard layouts; choose bindings after testing the physical keyboard.
 - Do not disable SIP or install experimental private-API tools just to automate native Spaces.
 - Amethyst's YAML configuration is linked via Stow to `~/.amethyst.yml`. It currently only hides the layout-name HUD (e.g. "Tall") shown on Space switches and layout changes; restart Amethyst after editing it. Keys in that file override the Preferences UI. Layout and shortcut settings can be added after verifying them in the app.

@@ -14,7 +14,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script installs Homebrew if necessary (with an interactive confirmation), installs packages with Homebrew Bundle, links the Ghostty, Amethyst, mise, tmux and Neovim configurations using GNU Stow, and installs CLI tools (gh, lazygit, tmux, Neovim, ripgrep, fd, fzf, tree-sitter) with mise. It can be run repeatedly and will not overwrite conflicting existing configuration files.
+The script installs Homebrew if necessary (with an interactive confirmation), installs packages with Homebrew Bundle, links the Ghostty, Amethyst, mise, tmux, Neovim and lazygit configurations using GNU Stow, and installs CLI tools (gh, lazygit, tmux, Neovim, ripgrep, fd, fzf, tree-sitter) with mise. It can be run repeatedly and will not overwrite conflicting existing configuration files.
 
 **Current scope:** Ghostty, JetBrainsMono Nerd Font, Catppuccin Mocha, GNU Stow, Bash 5 (alongside the macOS system Bash), Amethyst, mise-managed CLI tools (gh, lazygit, tmux, Neovim and LazyVim's helpers), plus Omarchy-style tmux and LazyVim configurations. CLI tools come from mise where possible and from Homebrew only as a fallback. The login shell remains unchanged. Omarchy (Arch Linux) support is a future addition.
 
@@ -32,6 +32,7 @@ amethyst/.amethyst.yml
 bootstrap.sh
 docs/macos-setup.md
 ghostty/.config/ghostty/config
+lazygit/Library/Application Support/lazygit/config.yml
 mise/.config/mise/config.toml
 nvim/.config/nvim/
 tmux/.config/tmux/tmux.conf

@@ -32,4 +32,5 @@ stow --dir=. --target="$HOME" --simulate --verbose=1 <package>   # dry-run linki
 - Don't change the login shell, disable SIP, or add private-API window-management tools. Amethyst tiles windows on native macOS Spaces; Space creation and app-to-Space assignment stay manual.
 - Amethyst keys in `~/.amethyst.yml` override its Preferences UI; Amethyst must be restarted to pick up changes.
 - Repo Git identity is `marius0xdev <marius0x@gmail.com>` (set locally, not globally); the remote is reached via the `github-marius0xdev` SSH host alias.
-- Docs must not claim a feature works until it is tested (e.g. `Option + 1..9` Space switching is explicitly not implemented yet).
+- Docs must not claim a feature works until it is tested.
+- Keyboard: macOS Spaces use `Command + 1..9`; tmux and Neovim use `Option` as Alt (left Option only, via Ghostty); Amethyst uses `Option + Shift` and `Control + Option + Shift`. Check new bindings against these.
