@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship, zsh and Atuin configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Starship, Atuin, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile` and makes `~/.zshrc` load Starship and the repo's zsh settings (`~/.config/zsh/dotfiles.zsh`: aliases, completion); open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship, zsh and Atuin configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Starship, Atuin, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter; kubectl and sofka). It also adds mise's shims to `PATH` in `~/.zprofile` and makes `~/.zshrc` load Starship and the repo's zsh settings (`~/.config/zsh/dotfiles.zsh`: aliases, completion); open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 ### CLI tools: mise first, Homebrew as fallback
 
@@ -165,6 +165,14 @@ The bootstrap installs `macos/LaunchAgents/com.marius0xdev.capslock-escape.plist
 
 `nvim/.config/nvim` is the [LazyVim starter](https://github.com/LazyVim/starter) plus Omarchy's tweaks ([omarchy-lazyvim](https://github.com/omacom/omarchy-lazyvim)): Neo-tree, no scroll animation, and Catppuccin Mocha to match Ghostty. The first `nvim` start downloads plugins and compiles treesitter parsers (needs network and the Command Line Tools' C compiler), then writes `nvim/.config/nvim/lazy-lock.json` into this repo: **commit it**, since it pins every plugin to an exact commit. Use `:Lazy restore` to install exactly the locked versions; `:Lazy update` deliberately bumps them (review the lockfile diff, then commit).
 
+### Kubernetes: kubectl and sofka
+
+Both via mise: `kubectl` on the 1.35 line, and [sofka](https://github.com/nklmilojevic/sofka) as the cluster TUI (chosen over k9s on 2026-11-05, on trial).
+
+Why sofka: noticeably faster filtering and view switching on large clusters (its [own benchmark](https://github.com/nklmilojevic/sofka/blob/main/docs/benchmark-k9s.md), ~1,440 pods: filter 55 ms vs 626 ms, about half the memory), built-in Flux/Argo CD actions (`t`), an incident view (`X`), read-only guardrails (`--readonly` or per-context config) and a Catppuccin skin. Trade-offs: only ~4 months old, mostly one maintainer, releases every few days (we pin one at least two weeks old), and its macOS binaries are not signed/notarized. mise downloads them outside the browser, so Gatekeeper usually doesn't block them; if it does, run `xattr -d com.apple.quarantine "$(mise which sofka)"`.
+
+Usage: `sofka` (pods in the current context), `sofka ctx` (context picker), `sofka -n NAMESPACE`, `sofka --readonly`. If sofka doesn't work out, k9s is the fallback (`mise use -g k9s@<version>`); `sofka import k9s` converts k9s config the other way.
+
 ## Recovery and backup
 
 Use separate SSH keys on separate machines. If a Mac is lost, revoke that machine's key in GitHub and create a new key on the replacement machine. A private SSH key backup is optional; secure account recovery and 2FA recovery codes are more important. Never commit secrets or recovery codes.
@@ -173,8 +181,7 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
 - TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge). Consider its `lazy` manager for `lazy-lock.json` too.
-- TODO: **tmux dev session layout**: a new session automatically opens 5 windows: `nvim`, `lazygit`, `zsh`, `k9s` (or its replacement, see below), `claude`. Decide between a small shell function/script and a tmux hook, and keep it working with `detach-on-destroy off` and Omarchy's `Option + 1..5` window keys.
-- TODO: **k9s vs [sofka](https://github.com/nklmilojevic/sofka)**: analyse before installing either (features, speed claims, maturity/maintenance, license, mise availability), then pin the chosen one via mise. k9s is the current tool.
+- TODO: **tmux dev session layout**: a new session automatically opens 5 windows: `nvim`, `lazygit`, `zsh`, `sofka`, `claude`. Decide between a small shell function/script and a tmux hook, and keep it working with `detach-on-destroy off` and Omarchy's `Option + 1..5` window keys.
 - Add cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 
