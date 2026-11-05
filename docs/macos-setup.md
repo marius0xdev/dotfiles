@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst and mise configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux). It also adds mise's shims to `PATH` in `~/.zprofile`; open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst, mise, tmux, Neovim and lazygit configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux, Neovim and LazyVim's helpers: ripgrep, fd, fzf, tree-sitter). It also adds mise's shims to `PATH` in `~/.zprofile`; open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 ### CLI tools: mise first, Homebrew as fallback
 
@@ -112,6 +112,24 @@ When migrating from a Homebrew-installed `gh`, run the loop above after `bash ./
 
 Amethyst requires macOS Accessibility permission, which must be granted manually in System Settings after reviewing the request.
 
+### tmux (Omarchy-style)
+
+`tmux/.config/tmux/tmux.conf` is adapted from [Omarchy's tmux config](https://github.com/omacom/omarchy/blob/quattro/config/tmux/tmux.conf). Prefix is `Control + Space` (`Control + B` also works); `prefix ?` lists all bindings, `prefix q` reloads the config. Alt bindings use the **left Option** key (Ghostty's `macos-option-as-alt = left`; right Option still types Polish characters):
+
+- `Option + Enter` / `Option + Shift + Enter`: split pane vertically / horizontally; `Option + Escape`: kill pane
+- `Control + Option + arrows`: focus pane; `Control + Option + Shift + arrows`: resize pane
+- `Option + 1..9`: switch window; `Option + Left/Right`: previous/next window; `Option + Up/Down`: previous/next session
+
+Spaces are switched with `Command + 1..9`, so tmux's `Option + 1..9` doesn't clash with them. The resize keys share Amethyst's `Control + Option + Shift` modifier; whichever app grabs a key globally wins, so test them together before changing either side.
+
+### lazygit
+
+Installed via mise; `lazygit/Library/Application Support/lazygit/config.yml` (macOS's lazygit config path) only sets the Catppuccin Mocha theme; otherwise defaults, like Omarchy. Start it with `lazygit` in a repo, or `Space g g` inside LazyVim. lazygit creates an empty `config.yml` on its first run; if Stow reports a conflict for it, delete that empty file and rerun the bootstrap.
+
+### Neovim (LazyVim, Omarchy-style)
+
+`nvim/.config/nvim` is the [LazyVim starter](https://github.com/LazyVim/starter) plus Omarchy's tweaks ([omarchy-lazyvim](https://github.com/omacom/omarchy-lazyvim)): Neo-tree, no scroll animation, and Catppuccin Mocha to match Ghostty. The first `nvim` start downloads plugins and compiles treesitter parsers (needs network and the Command Line Tools' C compiler), then writes `nvim/.config/nvim/lazy-lock.json` into this repo: **commit it**, since it pins every plugin to an exact commit. Use `:Lazy restore` to install exactly the locked versions; `:Lazy update` deliberately bumps them (review the lockfile diff, then commit).
+
 ## Recovery and backup
 
 Use separate SSH keys on separate machines. If a Mac is lost, revoke that machine's key in GitHub and create a new key on the replacement machine. A private SSH key backup is optional; secure account recovery and 2FA recovery codes are more important. Never commit secrets or recovery codes.
@@ -119,9 +137,8 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 ## Planned work
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
-- Add tmux and lazygit configuration (both are installed via mise, with default settings for now).
-- TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge).
-- Add Neovim and cross-platform Stow packages.
+- TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge). Consider its `lazy` manager for `lazy-lock.json` too.
+- Add cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 
 ## 7. Amethyst and native macOS Spaces (manual setup)
@@ -138,7 +155,7 @@ The Brewfile installs **Amethyst**. It tiles windows on native macOS Spaces; it 
 ### Known limitations and future keyboard work
 
 - Amethyst controls **window tiling**; Mission Control/macOS controls **Space creation, switching and app assignment**.
-- Our desired `Option + 1` ... `Option + 9` workspace-switching bindings are **not yet implemented**. Do not claim they work until a tested shortcut mechanism is added. macOS's native Control-number shortcuts are the initial fallback.
+- Spaces are switched with `Command + 1..9`, assigned in **System Settings > Keyboard > Keyboard Shortcuts > Mission Control**. macOS handles these before apps, so app shortcuts on `Command + number` (e.g. tab switching in Ghostty or Chrome) no longer fire.
 - Some shortcuts can conflict with typing special characters on Polish keyboard layouts; choose bindings after testing the physical keyboard.
 - Do not disable SIP or install experimental private-API tools just to automate native Spaces.
 - Amethyst's YAML configuration is linked via Stow to `~/.amethyst.yml`. It currently only hides the layout-name HUD (e.g. "Tall") shown on Space switches and layout changes; restart Amethyst after editing it. Keys in that file override the Preferences UI. Layout and shortcut settings can be added after verifying them in the app.

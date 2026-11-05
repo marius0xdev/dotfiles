@@ -4,3 +4,7 @@ font-size = 14
 theme = Catppuccin Mocha
 window-padding-x = 10
 window-padding-y = 8
+
+# Left Option sends Alt/Meta (tmux M- bindings, Neovim); right Option still
+# types special characters (e.g. Polish diacritics).
+macos-option-as-alt = left

@@ -1,7 +1,14 @@
 # Global CLI tools managed by mise (installed by `mise install` in bootstrap.sh).
-# Prefer mise over Homebrew; all of these use prebuilt aqua binaries.
+# Prefer mise over Homebrew; all of these install prebuilt binaries.
 # Versions are pinned exactly for reproducibility; bump them deliberately.
 [tools]
 gh = "2.103.3"
 lazygit = "0.66.2"
 tmux = "3.7c"
+
+# Neovim + tools LazyVim relies on (search, file finding, treesitter parsers).
+neovim = "0.12.6"
+ripgrep = "15.2.0"
+fd = "10.5.0"
+fzf = "0.74.5"
+tree-sitter = "0.27.1"
