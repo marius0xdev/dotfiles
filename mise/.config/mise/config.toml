@@ -3,6 +3,7 @@
 # Versions are pinned exactly for reproducibility; bump them deliberately.
 [tools]
 gh = "2.103.3"
+glab = "1.124.0"
 lazygit = "0.66.2"
 tmux = "3.7c"
 starship = "1.27.0"
