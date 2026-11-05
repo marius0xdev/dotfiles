@@ -33,6 +33,7 @@ fi
 # Aliases
 alias v='nvim'
 alias t='tmux'
+alias k='kubectl'
 
 # dev [dir]: open a tmux session for a project directory (default: current),
 # named after the directory, with windows (Option + 1..6):
