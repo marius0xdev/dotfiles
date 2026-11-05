@@ -118,13 +118,13 @@ Amethyst requires macOS Accessibility permission, which must be granted manually
 
 - `Option + Enter` / `Option + Shift + Enter`: split pane vertically / horizontally; `Option + Escape`: kill pane
 - `Control + Option + arrows`: focus pane; `Control + Option + Shift + arrows`: resize pane
-- `Option + 1..9`: switch window; `Option + Left/Right`: previous/next window; `Option + Up/Down`: previous/next session
+- `prefix + 1..9`: switch window; `Option + Left/Right`: previous/next window; `Option + Up/Down`: previous/next session
 
-Spaces are switched with `Command + 1..9`, so tmux's `Option + 1..9` doesn't clash with them. The resize keys share Amethyst's `Control + Option + Shift` modifier; whichever app grabs a key globally wins, so test them together before changing either side.
+tmux deliberately leaves `Option + 1..9` unbound so it reaches the shell, where Atuin's search uses it to pick the Nth entry. Spaces use `Command + 1..9`. The resize keys share Amethyst's `Control + Option + Shift` modifier; whichever app grabs a key globally wins, so test them together before changing either side.
 
 ### tmux dev layout
 
-`dev [dir]` (zsh function in `dotfiles.zsh`) opens a tmux session for a project directory, by default the current one, e.g. `dev ~/Code/dotfiles`. The session is named after the directory (`dotfiles`) and has six windows, switched with `Option + 1..6`:
+`dev [dir]` (zsh function in `dotfiles.zsh`) opens a tmux session for a project directory, by default the current one, e.g. `dev ~/Code/dotfiles`. The session is named after the directory (`dotfiles`) and has six windows, switched with `prefix + 1..6`:
 
 1. `nvim` · 2. `lazygit` · 3. plain zsh · 4. `sofka` · 5. `claude`, all started in the project directory
 6. `nvim ~/Diary/YYYY-MM-DD.md`: today's diary note, started in `~/Diary` (created by the bootstrap)
