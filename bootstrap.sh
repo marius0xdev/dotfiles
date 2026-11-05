@@ -93,4 +93,17 @@ stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit
 # Install the tools declared in ~/.config/mise/config.toml.
 "$mise_executable" install
 
+# Caps Lock -> Escape via a LaunchAgent that runs hidutil at every login.
+# The plist is copied, not stowed: launchd may refuse symlinked agents.
+# (Re)load it only when the installed copy differs from the repo.
+capslock_label="com.marius0xdev.capslock-escape"
+capslock_src="$ROOT/macos/LaunchAgents/$capslock_label.plist"
+capslock_dst="$HOME/Library/LaunchAgents/$capslock_label.plist"
+if ! cmp -s "$capslock_src" "$capslock_dst"; then
+  mkdir -p "$HOME/Library/LaunchAgents"
+  cp "$capslock_src" "$capslock_dst"
+  launchctl bootout "gui/$(id -u)/$capslock_label" 2>/dev/null || true
+  launchctl bootstrap "gui/$(id -u)" "$capslock_dst"
+fi
+
 printf '\n%s\n' "Bootstrap complete. Open a new Ghostty window so mise tools are on PATH."
