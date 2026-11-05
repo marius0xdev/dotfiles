@@ -5,6 +5,7 @@
 gh = "2.103.3"
 lazygit = "0.66.2"
 tmux = "3.7c"
+starship = "1.27.0"
 
 # Neovim + tools LazyVim relies on (search, file finding, treesitter parsers).
 neovim = "0.12.6"
