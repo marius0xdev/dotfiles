@@ -6,6 +6,9 @@ brew "stow"
 # macOS /bin/bash stays untouched; the default login shell remains zsh.
 brew "bash"
 
+# GitHub CLI creates pull requests and serves as the HTTPS Git credential helper.
+brew "gh"
+
 # Ghostty is the terminal emulator used on macOS.
 cask "ghostty"
 
