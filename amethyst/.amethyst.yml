@@ -1,0 +1,7 @@
+# Amethyst reads ~/.amethyst.yml; keys set here override the Preferences UI.
+# Keys left out keep their values from Amethyst's Preferences.
+
+# Do not flash the layout name (e.g. "Tall") when switching Spaces.
+enables-layout-hud-on-space-change: false
+# Do not flash the layout name when cycling layouts.
+enables-layout-hud: false

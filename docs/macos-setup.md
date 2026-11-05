@@ -89,7 +89,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code, and links Ghostty's configuration using GNU Stow. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code, and links the Ghostty and Amethyst configurations using GNU Stow. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
 
 Amethyst requires macOS Accessibility permission, which must be granted manually in System Settings after reviewing the request.
 
@@ -100,7 +100,12 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 ## Planned work
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
-- Add tmux, mise, Neovim and cross-platform Stow packages.
+- TODO: install CLI tools, preferring mise and falling back to Homebrew only when mise can't provide a tool:
+  - [ ] **mise** via the Brewfile (`brew "mise"`), activated in the shell.
+  - [ ] **lazygit** via mise (check with `mise registry | grep lazygit`); otherwise Brewfile.
+  - [ ] **tmux** via mise if a prebuilt backend exists (check `mise registry | grep tmux`; source builds need extra dependencies); otherwise Brewfile.
+  - [ ] Track mise tool versions in a Stow package (`~/.config/mise/config.toml`).
+- Add Neovim and cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 
 ## 7. Amethyst and native macOS Spaces (manual setup)
@@ -120,4 +125,4 @@ The Brewfile installs **Amethyst**. It tiles windows on native macOS Spaces; it 
 - Our desired `Option + 1` ... `Option + 9` workspace-switching bindings are **not yet implemented**. Do not claim they work until a tested shortcut mechanism is added. macOS's native Control-number shortcuts are the initial fallback.
 - Some shortcuts can conflict with typing special characters on Polish keyboard layouts; choose bindings after testing the physical keyboard.
 - Do not disable SIP or install experimental private-API tools just to automate native Spaces.
-- An Amethyst YAML configuration can be added via Stow later, after verifying the preferred layout and shortcut settings in the app.
+- Amethyst's YAML configuration is linked via Stow to `~/.amethyst.yml`. It currently only hides the layout-name HUD (e.g. "Tall") shown on Space switches and layout changes; restart Amethyst after editing it. Keys in that file override the Preferences UI. Layout and shortcut settings can be added after verifying them in the app.
