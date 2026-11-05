@@ -19,3 +19,6 @@ tree-sitter = "0.27.1"
 # Kubernetes: kubectl 1.35 line; sofka (Rust TUI) chosen over k9s, see docs.
 kubectl = "1.35.9"
 sofka = "0.31.14"
+
+# DigitalOcean CLI: last 1.x release; the 2.x line is still settling.
+doctl = "1.186.0"
