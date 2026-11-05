@@ -9,7 +9,7 @@ macOS dotfiles (Omarchy/Arch support is planned, not implemented). There is no b
 ## Commands
 
 ```sh
-bash ./bootstrap.sh                                   # full setup: Homebrew, brew bundle, stow
+bash ./bootstrap.sh                                   # full setup: Homebrew, brew bundle, stow, mise install
 bash -n bootstrap.sh                                  # syntax check the bootstrap
 brew bundle check --file=Brewfile                     # are all Brewfile entries installed?
 stow --dir=. --target="$HOME" --simulate --verbose=1 <package>   # dry-run linking one package
@@ -17,9 +17,10 @@ stow --dir=. --target="$HOME" --simulate --verbose=1 <package>   # dry-run linki
 
 ## Architecture
 
-- **Brewfile** declares every installed tool/app (formulae and casks), each with a comment explaining why it's there.
+- **Tool installation split:** CLI tools go in `mise/.config/mise/config.toml` (installed by `mise install`); the **Brewfile** holds mise itself, GUI casks, and only CLI tools mise can't provide (check `mise registry <tool>` first). mise versions are pinned exactly, never `latest`: reliability over freshness. Each Brewfile entry has a comment explaining why it's there.
 - **Stow packages**: each top-level directory other than `docs/` (e.g. `ghostty/`, `amethyst/`) mirrors paths relative to `$HOME`. `ghostty/.config/ghostty/config` → `~/.config/ghostty/config`; `amethyst/.amethyst.yml` → `~/.amethyst.yml`. A new package must be added to **both** `stow` lines at the end of `bootstrap.sh` (the `--simulate` dry run and the real run).
-- **bootstrap.sh** order: require macOS + Command Line Tools → find or install Homebrew → persist `brew shellenv` in `~/.zprofile` (idempotently) → `brew bundle` → stow dry run → stow.
+- **bootstrap.sh** order: require macOS + Command Line Tools → find or install Homebrew → persist `brew shellenv` in `~/.zprofile` (idempotently) → `brew bundle` → persist `mise activate zsh --shims` in `~/.zprofile` (after Homebrew, so mise tools win) → stow dry run → stow → `mise install`.
+- `gh` is mise-managed; Git's HTTPS credential helper must point at the stable shim `~/.local/share/mise/shims/gh`, not a versioned install path (see `docs/macos-setup.md`).
 - **docs/macos-setup.md** holds manual steps that are deliberately not automated (SSH key, Git identity, Accessibility permission, Mission Control/Spaces setup). Keep it, the README and its "Repository layout" block in sync with changes.
 
 ## Conventions and constraints

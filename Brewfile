@@ -6,8 +6,10 @@ brew "stow"
 # macOS /bin/bash stays untouched; the default login shell remains zsh.
 brew "bash"
 
-# GitHub CLI creates pull requests and serves as the HTTPS Git credential helper.
-brew "gh"
+# mise installs and versions CLI tools (gh, lazygit, tmux, ...); see
+# mise/.config/mise/config.toml. Prefer mise; use Homebrew only for tools
+# mise can't provide, plus GUI apps (casks).
+brew "mise"
 
 # Ghostty is the terminal emulator used on macOS.
 cask "ghostty"

@@ -89,7 +89,26 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code, and links the Ghostty and Amethyst configurations using GNU Stow. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+The script downloads a commit-pinned Homebrew installer if missing (with SHA-256 verification), runs `brew bundle` including Claude Code and mise, links the Ghostty, Amethyst and mise configurations using GNU Stow, and runs `mise install` for the CLI tools in `~/.config/mise/config.toml` (gh, lazygit, tmux). It also adds mise's shims to `PATH` in `~/.zprofile`; open a new terminal afterwards. If Ghostty already has a configuration, resolve the conflict manually rather than overwriting it.
+
+### CLI tools: mise first, Homebrew as fallback
+
+CLI tools are installed by mise (`mise/.config/mise/config.toml`); Homebrew installs mise itself, GUI apps (casks), and only those CLI tools mise can't provide. Versions are pinned exactly (never `latest`) so every machine gets the same, tested tools. Add a tool with an explicit version, e.g. `mise use -g lazygit@0.66.2` (Stow links the config into the repo, so the change shows up in `git diff`); check availability with `mise registry <tool>`.
+
+### GitHub CLI authentication and Git credential helper
+
+`gh` stores its token in the macOS Keychain. To push over HTTPS with it, point Git's credential helper at mise's **shim** (a stable path; `gh auth setup-git` would record a versioned install path that breaks when `gh` is upgraded):
+
+```sh
+gh auth login --hostname github.com --git-protocol https --with-token   # paste token, then Ctrl-D
+for host in github.com gist.github.com; do
+  git config --global --unset-all "credential.https://$host.helper"
+  git config --global --add "credential.https://$host.helper" ''
+  git config --global --add "credential.https://$host.helper" '!'"$HOME/.local/share/mise/shims/gh auth git-credential"
+done
+```
+
+When migrating from a Homebrew-installed `gh`, run the loop above after `bash ./bootstrap.sh`, then `brew uninstall gh`, and check that `command -v gh` shows the mise shim in a new terminal.
 
 Amethyst requires macOS Accessibility permission, which must be granted manually in System Settings after reviewing the request.
 
@@ -100,11 +119,8 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 ## Planned work
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
-- TODO: install CLI tools, preferring mise and falling back to Homebrew only when mise can't provide a tool:
-  - [ ] **mise** via the Brewfile (`brew "mise"`), activated in the shell.
-  - [ ] **lazygit** via mise (check with `mise registry | grep lazygit`); otherwise Brewfile.
-  - [ ] **tmux** via mise if a prebuilt backend exists (check `mise registry | grep tmux`; source builds need extra dependencies); otherwise Brewfile.
-  - [ ] Track mise tool versions in a Stow package (`~/.config/mise/config.toml`).
+- Add tmux and lazygit configuration (both are installed via mise, with default settings for now).
+- TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge).
 - Add Neovim and cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 
