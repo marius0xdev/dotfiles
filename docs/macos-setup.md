@@ -126,6 +126,19 @@ Spaces are switched with `Command + 1..9`, so tmux's `Option + 1..9` doesn't cla
 
 Installed via mise; `lazygit/Library/Application Support/lazygit/config.yml` (macOS's lazygit config path) only sets the Catppuccin Mocha theme; otherwise defaults, like Omarchy. Start it with `lazygit` in a repo, or `Space g g` inside LazyVim. lazygit creates an empty `config.yml` on its first run; if Stow reports a conflict for it, delete that empty file and rerun the bootstrap.
 
+### Caps Lock as Escape
+
+The bootstrap installs `macos/LaunchAgents/com.marius0xdev.capslock-escape.plist` into `~/Library/LaunchAgents` and loads it. It runs macOS's built-in `hidutil` at every login to remap Caps Lock to Escape on all keyboards (handy for leaving insert mode in Neovim); Caps Lock itself is then unavailable. No third-party app is needed.
+
+- Check: `hidutil property --get UserKeyMapping` shows the mapping (`30064771129` → `30064771113`).
+- Undo:
+  ```sh
+  launchctl bootout "gui/$(id -u)/com.marius0xdev.capslock-escape"
+  rm ~/Library/LaunchAgents/com.marius0xdev.capslock-escape.plist
+  hidutil property --set '{"UserKeyMapping":[]}'
+  ```
+- If **System Settings > Keyboard > Keyboard Shortcuts > Modifier Keys** also remaps Caps Lock, leave it at the default ("⇪ Caps Lock") to avoid two layers of remapping.
+
 ### Neovim (LazyVim, Omarchy-style)
 
 `nvim/.config/nvim` is the [LazyVim starter](https://github.com/LazyVim/starter) plus Omarchy's tweaks ([omarchy-lazyvim](https://github.com/omacom/omarchy-lazyvim)): Neo-tree, no scroll animation, and Catppuccin Mocha to match Ghostty. The first `nvim` start downloads plugins and compiles treesitter parsers (needs network and the Command Line Tools' C compiler), then writes `nvim/.config/nvim/lazy-lock.json` into this repo: **commit it**, since it pins every plugin to an exact commit. Use `:Lazy restore` to install exactly the locked versions; `:Lazy update` deliberately bumps them (review the lockfile diff, then commit).

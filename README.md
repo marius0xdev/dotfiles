@@ -33,6 +33,7 @@ bootstrap.sh
 docs/macos-setup.md
 ghostty/.config/ghostty/config
 lazygit/Library/Application Support/lazygit/config.yml
+macos/LaunchAgents/com.marius0xdev.capslock-escape.plist
 mise/.config/mise/config.toml
 nvim/.config/nvim/
 tmux/.config/tmux/tmux.conf
