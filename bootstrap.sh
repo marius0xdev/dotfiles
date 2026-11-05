@@ -87,11 +87,18 @@ fi
 # directory, so lazy.nvim writes lazy-lock.json into the repo for committing.
 # Pre-create lazygit's macOS config dir so its state.yml stays out of the repo.
 mkdir -p "$HOME/.config/mise" "$HOME/Library/Application Support/lazygit"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit
-stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship
 
 # Install the tools declared in ~/.config/mise/config.toml.
 "$mise_executable" install
+
+# Enable the Starship prompt in interactive zsh. Appended (not stowed) so the
+# existing ~/.zshrc is kept; it must stay the last prompt setup in that file.
+starship_line='command -v starship >/dev/null && eval "$(starship init zsh)"'
+if ! grep -Fqx "$starship_line" "$HOME/.zshrc" 2>/dev/null; then
+  printf '\n%s\n' '# Starship prompt' "$starship_line" >> "$HOME/.zshrc"
+fi
 
 # Caps Lock -> Escape via a LaunchAgent that runs hidutil at every login.
 # The plist is copied, not stowed: launchd may refuse symlinked agents.
