@@ -73,9 +73,21 @@ fi
 
 brew bundle --file="$ROOT/Brewfile"
 
-# Dry-run first. Stow aborts on conflicts instead of overwriting user files.
-mkdir -p "$HOME/.config"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst
-stow --dir="$ROOT" --target="$HOME" ghostty amethyst
+# Put mise shims on PATH after Homebrew so mise-managed tools take precedence.
+# Shims (not `mise activate` hooks) also work in non-interactive shells.
+mise_executable="$(brew --prefix)/bin/mise"
+mise_line="eval \"\$($mise_executable activate zsh --shims)\""
+if ! grep -Fqx "$mise_line" "$HOME/.zprofile" 2>/dev/null; then
+  printf '\n%s\n' '# mise' "$mise_line" >> "$HOME/.zprofile"
+fi
 
-printf '\n%s\n' "Bootstrap complete. Open Ghostty to see the configured theme."
+# Dry-run first. Stow aborts on conflicts instead of overwriting user files.
+# Pre-create ~/.config/mise so Stow links only config.toml, not the directory.
+mkdir -p "$HOME/.config/mise"
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise
+
+# Install the tools declared in ~/.config/mise/config.toml.
+"$mise_executable" install
+
+printf '\n%s\n' "Bootstrap complete. Open a new Ghostty window so mise tools are on PATH."

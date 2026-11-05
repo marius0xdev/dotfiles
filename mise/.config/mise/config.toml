@@ -1,0 +1,6 @@
+# Global CLI tools managed by mise (installed by `mise install` in bootstrap.sh).
+# Prefer mise over Homebrew; all of these use prebuilt aqua binaries.
+[tools]
+gh = "latest"
+lazygit = "latest"
+tmux = "latest"
