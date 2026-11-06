@@ -8,3 +8,7 @@ update_check = false
 # Follow zsh's vi mode: search starts in vim-insert from insert mode and in
 # vim-normal from normal mode.
 keymap_mode = "auto"
+
+# Enter runs the selected command; Tab puts it on the command line for editing.
+# Atuin's built-in default is false (only its generated sample config sets true).
+enter_accept = true
