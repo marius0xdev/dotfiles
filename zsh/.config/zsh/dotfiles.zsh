@@ -15,6 +15,19 @@ command -v kubectl >/dev/null && source <(kubectl completion zsh)
 command -v sofka >/dev/null && source <(sofka completion zsh)
 command -v doctl >/dev/null && source <(doctl completion zsh)
 
+# fzf-tab (Homebrew) shows Tab completions in fzf instead of zsh's menu. It must
+# load after compinit and before plugins that wrap widgets (e.g.
+# zsh-autosuggestions). `[%d]` adds group headers and `<` / `>` switch groups
+# (fzf-tab's default is F1 / F2); git checkout candidates keep git's order.
+fzf_tab=${HOMEBREW_PREFIX:-/opt/homebrew}/share/fzf-tab/fzf-tab.zsh
+if [[ -r $fzf_tab ]] && command -v fzf >/dev/null; then
+  source "$fzf_tab"
+  zstyle ':completion:*:descriptions' format '[%d]'
+  zstyle ':completion:*:git-checkout:*' sort false
+  zstyle ':fzf-tab:*' switch-group '<' '>'
+fi
+unset fzf_tab
+
 # Vi mode for the command line (same as `bindkey -v`). Caps Lock is Escape.
 set -o vi
 # Switch to normal mode 10ms after Escape instead of zsh's default 400ms.
