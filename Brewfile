@@ -15,6 +15,10 @@ brew "mise"
 # It is a zsh plugin, not a binary, so mise has no registry entry for it.
 brew "fzf-tab"
 
+# GNU grep (installed as ggrep): tfenv (from mise) requires it on macOS to
+# resolve Terraform versions. mise has no registry entry for GNU grep.
+brew "grep"
+
 # Ghostty is the terminal emulator used on macOS.
 cask "ghostty"
 

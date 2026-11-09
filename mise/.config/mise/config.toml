@@ -25,3 +25,11 @@ doctl = "1.186.0"
 
 # HashiCorp Vault CLI.
 vault = "2.2.1"
+
+# tfenv manages Terraform versions (reads .terraform-version per project).
+tfenv = "3.2.2"
+
+[env]
+# Keep tfenv's Terraform installs outside mise's per-version tfenv dir, so they
+# survive tfenv upgrades.
+TFENV_CONFIG_DIR = "{{env.HOME}}/.local/share/tfenv"

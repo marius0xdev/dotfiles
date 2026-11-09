@@ -14,7 +14,7 @@ cat Brewfile
 bash ./bootstrap.sh
 ```
 
-The script installs Homebrew if necessary (with an interactive confirmation), installs packages with Homebrew Bundle, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship, zsh and Atuin configurations using GNU Stow, and installs CLI tools (gh, glab, lazygit, tmux, Starship, Atuin, Neovim, ripgrep, fd, fzf, tree-sitter, kubectl, sofka, doctl, vault) with mise. It can be run repeatedly and will not overwrite conflicting existing configuration files.
+The script installs Homebrew if necessary (with an interactive confirmation), installs packages with Homebrew Bundle, links the Ghostty, Amethyst, mise, tmux, Neovim, lazygit, Starship, zsh and Atuin configurations using GNU Stow, and installs CLI tools (gh, glab, lazygit, tmux, Starship, Atuin, Neovim, ripgrep, fd, fzf, tree-sitter, kubectl, sofka, doctl, vault, tfenv) with mise. It can be run repeatedly and will not overwrite conflicting existing configuration files.
 
 **Current scope:** Ghostty, JetBrainsMono Nerd Font, Catppuccin Mocha, GNU Stow, Bash 5 (alongside the macOS system Bash), Amethyst, mise-managed CLI tools (gh, glab, lazygit, tmux, Neovim and LazyVim's helpers), plus Omarchy-style tmux, LazyVim and Starship configurations, zsh vi mode, fzf-tab completion, Atuin shell history, and kubectl + sofka for Kubernetes. CLI tools come from mise where possible and from Homebrew only as a fallback. The login shell remains unchanged. Omarchy (Arch Linux) support is a future addition.
 
