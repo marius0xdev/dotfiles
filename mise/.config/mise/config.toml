@@ -22,3 +22,6 @@ sofka = "0.31.14"
 
 # DigitalOcean CLI: last 1.x release; the 2.x line is still settling.
 doctl = "1.186.0"
+
+# HashiCorp Vault CLI.
+vault = "2.2.1"
