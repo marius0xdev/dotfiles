@@ -32,6 +32,16 @@ tfenv = "3.2.2"
 # AWS CLI v2 (official AWS installer, bundles its own Python).
 aws-cli = "2.39.6"
 
+# consul-template: not in mise's registry, and HashiCorp publishes binaries only
+# on releases.hashicorp.com, so download those directly. Checksums come from the
+# release's SHA256SUMS; update them together with the version.
+[tools."http:consul-template"]
+version = "0.43.1"
+
+[tools."http:consul-template".platforms]
+macos-arm64 = { url = "https://releases.hashicorp.com/consul-template/0.43.1/consul-template_0.43.1_darwin_arm64.zip", checksum = "sha256:bea40f5fb22b82a37d589c89c47891871151a08370ff337db218b003f8eceef8" }
+macos-x64 = { url = "https://releases.hashicorp.com/consul-template/0.43.1/consul-template_0.43.1_darwin_amd64.zip", checksum = "sha256:42f334d635c306616e30cc21b2615fbd451d01b512a083a7c47443492503a222" }
+
 [env]
 # Keep tfenv's Terraform installs outside mise's per-version tfenv dir, so they
 # survive tfenv upgrades.
