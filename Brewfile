@@ -19,6 +19,11 @@ brew "fzf-tab"
 # resolve Terraform versions. mise has no registry entry for GNU grep.
 brew "grep"
 
+# Azure CLI (az), a CLI tool despite being a cask. mise only offers it as a
+# pypi package, which needs a separate Python 3.10+ toolchain; the cask uses
+# Homebrew's Python and also installs zsh completions.
+cask "azure-cli"
+
 # Ghostty is the terminal emulator used on macOS.
 cask "ghostty"
 
