@@ -19,6 +19,11 @@ brew "fzf-tab"
 # resolve Terraform versions. mise has no registry entry for GNU grep.
 brew "grep"
 
+# GNU coreutils, installed with a g prefix (gdate, gls, ...) so the macOS BSD
+# tools stay untouched; for scripts that call gdate. mise's coreutils is the
+# uutils rewrite, which provides no gdate command.
+brew "coreutils"
+
 # Azure CLI (az), a CLI tool despite being a cask. mise only offers it as a
 # pypi package, which needs a separate Python 3.10+ toolchain; the cask uses
 # Homebrew's Python and also installs zsh completions.
