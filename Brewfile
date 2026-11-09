@@ -11,6 +11,10 @@ brew "bash"
 # mise can't provide, plus GUI apps (casks).
 brew "mise"
 
+# fzf-tab replaces zsh's Tab completion menu with fzf (fzf itself is from mise).
+# It is a zsh plugin, not a binary, so mise has no registry entry for it.
+brew "fzf-tab"
+
 # Ghostty is the terminal emulator used on macOS.
 cask "ghostty"
 
