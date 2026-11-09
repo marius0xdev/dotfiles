@@ -24,11 +24,6 @@ brew "grep"
 # uutils rewrite, which provides no gdate command.
 brew "coreutils"
 
-# consul-template from HashiCorp's official tap (homebrew-core dropped HashiCorp
-# tools after their license change). mise has no registry entry for it, and
-# HashiCorp publishes binaries only on releases.hashicorp.com, not GitHub.
-brew "hashicorp/tap/consul-template"
-
 # Azure CLI (az), a CLI tool despite being a cask. mise only offers it as a
 # pypi package, which needs a separate Python 3.10+ toolchain; the cask uses
 # Homebrew's Python and also installs zsh completions.
