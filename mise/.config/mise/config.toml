@@ -29,6 +29,9 @@ vault = "2.2.1"
 # tfenv manages Terraform versions (reads .terraform-version per project).
 tfenv = "3.2.2"
 
+# AWS CLI v2 (official AWS installer, bundles its own Python).
+aws-cli = "2.39.6"
+
 [env]
 # Keep tfenv's Terraform installs outside mise's per-version tfenv dir, so they
 # survive tfenv upgrades.
