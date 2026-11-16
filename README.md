@@ -37,6 +37,7 @@ lazygit/Library/Application Support/lazygit/config.yml
 macos/LaunchAgents/com.marius0xdev.capslock-escape.plist
 mise/.config/mise/config.toml
 nvim/.config/nvim/
+renovate.json5
 starship/.config/starship.toml
 tmux/.config/tmux/tmux.conf
 zsh/.config/zsh/dotfiles.zsh

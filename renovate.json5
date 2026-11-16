@@ -1,0 +1,37 @@
+// Renovate (GitHub app) opens a PR when a pinned mise tool has a newer release
+// and keeps an open "Dependency Dashboard" issue listing pending updates.
+// Updates are never merged automatically: review, `mise install`, test, merge.
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: ['config:recommended'],
+  // Only the mise tools: the Brewfile has no versions, the Homebrew installer
+  // pin needs independent verification, and Renovate has no lazy.nvim manager.
+  enabledManagers: ['mise', 'custom.regex'],
+  automerge: false,
+  customManagers: [
+    {
+      // consul-template uses mise's http backend, which Renovate can't read.
+      customType: 'regex',
+      managerFilePatterns: ['**/.config/mise/config.toml'],
+      matchStrings: [
+        '\\[tools\\."http:consul-template"\\]\\nversion = "(?<currentValue>[^"]+)"',
+      ],
+      depNameTemplate: 'hashicorp/consul-template',
+      datasourceTemplate: 'github-releases',
+      extractVersionTemplate: '^v(?<version>.+)$',
+    },
+  ],
+  packageRules: [
+    {
+      // Its URLs and checksums must be updated by hand, so only list the new
+      // version in the Dependency Dashboard; ticking it there opens a PR.
+      matchDepNames: ['hashicorp/consul-template'],
+      dependencyDashboardApproval: true,
+    },
+    {
+      // sofka releases every few days; pin one at least two weeks old.
+      matchDepNames: ['sofka'],
+      minimumReleaseAge: '14 days',
+    },
+  ],
+}
