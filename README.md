@@ -27,6 +27,8 @@ Some preferences have no supported command-line setting and are set by hand once
 ## Repository layout
 
 ```text
+.github/scripts/consul-template-checksums.sh
+.github/workflows/consul-template-checksums.yml
 Brewfile
 amethyst/.amethyst.yml
 atuin/.config/atuin/config.toml
@@ -37,6 +39,7 @@ lazygit/Library/Application Support/lazygit/config.yml
 macos/LaunchAgents/com.marius0xdev.capslock-escape.plist
 mise/.config/mise/config.toml
 nvim/.config/nvim/
+renovate.json5
 starship/.config/starship.toml
 tmux/.config/tmux/tmux.conf
 zsh/.config/zsh/dotfiles.zsh

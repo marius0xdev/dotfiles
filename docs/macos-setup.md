@@ -95,6 +95,16 @@ The script downloads a commit-pinned Homebrew installer if missing (with SHA-256
 
 CLI tools are installed by mise (`mise/.config/mise/config.toml`); Homebrew installs mise itself, GUI apps (casks), and only those CLI tools mise can't provide. Versions are pinned exactly (never `latest`) so every machine gets the same, tested tools. Add a tool with an explicit version, e.g. `mise use -g lazygit@0.66.2` (Stow links the config into the repo, so the change shows up in `git diff`); check availability with `mise registry <tool>`. Tools mise only offers as `pypi:` packages (e.g. the Azure CLI) go in the Brewfile too, since they would need a separate Python toolchain.
 
+### Tool updates (Renovate)
+
+`renovate.json5` configures [Renovate](https://docs.renovatebot.com/) to watch the pinned versions in `mise/.config/mise/config.toml` and the GitHub Actions used by `.github/workflows/`. It opens one PR per newer release (never automerged) and keeps a **Dependency Dashboard** issue listing pending updates; GitHub notifies you about both. Merge a PR only after `git pull`, `mise install` and a quick test of the tool.
+
+- consul-template (mise's `http:` backend, which Renovate can't read) is matched by a regex, so Renovate bumps only its `version`. The `consul-template checksums` workflow then rewrites its download URLs and SHA-256 checksums from HashiCorp's SHA256SUMS, after checking that file's GPG signature against HashiCorp's pinned key fingerprint, and pushes a commit to the PR. mise refuses to install a download whose checksum doesn't match. To update by hand instead, change `version` and run `bash .github/scripts/consul-template-checksums.sh` (needs `gpg`).
+- sofka updates are proposed only once a release is 14 days old.
+- Not covered: the Brewfile (unversioned), the Homebrew installer pin in `bootstrap.sh` (verify it independently) and `nvim/.config/nvim/lazy-lock.json` (Renovate has no lazy.nvim manager; use `:Lazy update` in Neovim).
+
+One-time setup: install the [Renovate GitHub app](https://github.com/apps/renovate) and grant it access to this repository only. Because the repository already has a config, Renovate skips its onboarding PR and starts with the Dependency Dashboard issue; if the config is invalid, it opens an issue saying so.
+
 ### GitHub CLI authentication and Git credential helper
 
 `gh` stores its token in the macOS Keychain. To push over HTTPS with it, point Git's credential helper at mise's **shim** (a stable path; `gh auth setup-git` would record a versioned install path that breaks when `gh` is upgraded):
@@ -201,7 +211,6 @@ Use separate SSH keys on separate machines. If a Mac is lost, revoke that machin
 ## Planned work
 
 - Refine Amethyst keyboard shortcuts and workspace assignments after validating the initial setup.
-- TODO: add Renovate so it opens PRs when new versions of pinned mise tools are released. Its `mise` manager should pick up `mise/.config/mise/config.toml`; verify the file pattern matches, and keep updates as reviewable PRs (no automerge). Consider its `lazy` manager for `lazy-lock.json` too.
 - Add cross-platform Stow packages.
 - Add Arch Linux / Omarchy support.
 

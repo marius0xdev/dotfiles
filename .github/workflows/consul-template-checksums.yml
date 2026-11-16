@@ -1,0 +1,34 @@
+# Renovate can only bump consul-template's `version` in the mise config; this
+# rewrites its download URLs and SHA-256 checksums to match, from HashiCorp's
+# GPG-signed SHA256SUMS, and pushes the result to the Renovate PR.
+name: consul-template checksums
+
+on:
+  pull_request:
+    paths:
+      - mise/.config/mise/config.toml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    # Only Renovate's branches in this repository, never forks.
+    if: startsWith(github.head_ref, 'renovate/') && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref }}
+      - run: bash .github/scripts/consul-template-checksums.sh
+      # Pushes made with GITHUB_TOKEN don't trigger workflows, so this can't loop.
+      - name: Push updated URLs and checksums
+        run: |
+          if git diff --quiet; then
+            echo "Already up to date."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am 'Update consul-template URLs and checksums'
+          git push
