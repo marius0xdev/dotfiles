@@ -1,6 +1,8 @@
 // Renovate (GitHub app) opens a PR when a pinned mise tool has a newer release
 // and keeps an open "Dependency Dashboard" issue listing pending updates.
 // Updates are never merged automatically: review, `mise install`, test, merge.
+// JSON5 rather than renovate.json so every rule can carry a comment, like the
+// Brewfile and the mise config (JSON allows no comments).
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['config:recommended'],
