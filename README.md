@@ -24,6 +24,12 @@ Some preferences have no supported command-line setting and are set by hand once
 
 - **Display scaling:** System Settings > Displays > select the built-in display > **More Space**. The resolution shown (e.g. `1800 × 1169`) depends on the Mac model.
 
+## Tool updates
+
+mise tool versions are pinned exactly. [Renovate](https://docs.renovatebot.com/) (`renovate.json5`, run by the Renovate GitHub app) watches them and the GitHub Actions in `.github/workflows/`. It opens a PR for each newer release and keeps a **Dependency Dashboard** issue listing pending updates. Nothing is merged automatically: pull, `mise install`, try the tool, then merge.
+
+consul-template is downloaded straight from HashiCorp, so Renovate only bumps its version; a workflow then fills in the matching download URLs and checksums from HashiCorp's GPG-signed `SHA256SUMS`. The Brewfile, the Homebrew installer pin and Neovim plugins (`:Lazy update`) are updated by hand. Details and the one-time app setup: [docs/macos-setup.md](docs/macos-setup.md#tool-updates-renovate).
+
 ## Repository layout
 
 ```text
