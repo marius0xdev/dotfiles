@@ -1,18 +1,24 @@
-// Renovate (GitHub app) opens a PR when a pinned mise tool has a newer release
-// and keeps an open "Dependency Dashboard" issue listing pending updates.
+// Renovate (GitHub app) opens a PR when a pinned mise tool or GitHub Action has
+// a newer release and keeps an open "Dependency Dashboard" issue listing
+// pending updates.
 // Updates are never merged automatically: review, `mise install`, test, merge.
 // JSON5 rather than renovate.json so every rule can carry a comment, like the
 // Brewfile and the mise config (JSON allows no comments).
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['config:recommended'],
-  // Only the mise tools: the Brewfile has no versions, the Homebrew installer
-  // pin needs independent verification, and Renovate has no lazy.nvim manager.
-  enabledManagers: ['mise', 'custom.regex'],
+  // Only the mise tools and the workflows' actions: the Brewfile has no
+  // versions, the Homebrew installer pin needs independent verification, and
+  // Renovate has no lazy.nvim manager.
+  enabledManagers: ['mise', 'custom.regex', 'github-actions'],
   automerge: false,
+  // .github/workflows/consul-template-checksums.yml commits to Renovate's
+  // consul-template PRs; without this Renovate would stop updating them.
+  gitIgnoredAuthors: ['41898282+github-actions[bot]@users.noreply.github.com'],
   customManagers: [
     {
       // consul-template uses mise's http backend, which Renovate can't read.
+      // Renovate bumps only `version`; the workflow above fixes URLs/checksums.
       customType: 'regex',
       managerFilePatterns: ['**/.config/mise/config.toml'],
       matchStrings: [
@@ -24,12 +30,6 @@
     },
   ],
   packageRules: [
-    {
-      // Its URLs and checksums must be updated by hand, so only list the new
-      // version in the Dependency Dashboard; ticking it there opens a PR.
-      matchDepNames: ['hashicorp/consul-template'],
-      dependencyDashboardApproval: true,
-    },
     {
       // sofka releases every few days; pin one at least two weeks old.
       matchDepNames: ['sofka'],

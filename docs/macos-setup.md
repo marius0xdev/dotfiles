@@ -97,9 +97,9 @@ CLI tools are installed by mise (`mise/.config/mise/config.toml`); Homebrew inst
 
 ### Tool updates (Renovate)
 
-`renovate.json5` configures [Renovate](https://docs.renovatebot.com/) to watch the pinned versions in `mise/.config/mise/config.toml`. It opens one PR per newer release (never automerged) and keeps a **Dependency Dashboard** issue listing pending updates; GitHub notifies you about both. Merge a PR only after `git pull`, `mise install` and a quick test of the tool.
+`renovate.json5` configures [Renovate](https://docs.renovatebot.com/) to watch the pinned versions in `mise/.config/mise/config.toml` and the GitHub Actions used by `.github/workflows/`. It opens one PR per newer release (never automerged) and keeps a **Dependency Dashboard** issue listing pending updates; GitHub notifies you about both. Merge a PR only after `git pull`, `mise install` and a quick test of the tool.
 
-- consul-template (mise's `http:` backend) only appears in the Dependency Dashboard: tick it there to get a PR, then update its URLs and checksums from the release's SHA256SUMS by hand.
+- consul-template (mise's `http:` backend, which Renovate can't read) is matched by a regex, so Renovate bumps only its `version`. The `consul-template checksums` workflow then rewrites its download URLs and SHA-256 checksums from HashiCorp's SHA256SUMS, after checking that file's GPG signature against HashiCorp's pinned key fingerprint, and pushes a commit to the PR. mise refuses to install a download whose checksum doesn't match. To update by hand instead, change `version` and run `bash .github/scripts/consul-template-checksums.sh` (needs `gpg`).
 - sofka updates are proposed only once a release is 14 days old.
 - Not covered: the Brewfile (unversioned), the Homebrew installer pin in `bootstrap.sh` (verify it independently) and `nvim/.config/nvim/lazy-lock.json` (Renovate has no lazy.nvim manager; use `:Lazy update` in Neovim).
 

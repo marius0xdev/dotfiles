@@ -27,6 +27,8 @@ Some preferences have no supported command-line setting and are set by hand once
 ## Repository layout
 
 ```text
+.github/scripts/consul-template-checksums.sh
+.github/workflows/consul-template-checksums.yml
 Brewfile
 amethyst/.amethyst.yml
 atuin/.config/atuin/config.toml
