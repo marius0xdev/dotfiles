@@ -47,6 +47,7 @@ mise/.config/mise/config.toml
 nvim/.config/nvim/
 renovate.json5
 starship/.config/starship.toml
+terraform/.terraform-version
 tmux/.config/tmux/tmux.conf
 zsh/.config/zsh/dotfiles.zsh
 ```
