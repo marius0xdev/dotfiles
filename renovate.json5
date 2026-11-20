@@ -7,10 +7,11 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['config:recommended'],
-  // Only the mise tools and the workflows' actions: the Brewfile has no
-  // versions, the Homebrew installer pin needs independent verification, and
-  // Renovate has no lazy.nvim manager.
-  enabledManagers: ['mise', 'custom.regex', 'github-actions'],
+  // Only the mise tools, the default Terraform (terraform/.terraform-version)
+  // and the workflows' actions: the Brewfile has no versions, the Homebrew
+  // installer pin needs independent verification, and Renovate has no
+  // lazy.nvim manager.
+  enabledManagers: ['mise', 'terraform-version', 'custom.regex', 'github-actions'],
   automerge: false,
   // .github/workflows/consul-template-checksums.yml commits to Renovate's
   // consul-template PRs; without this Renovate would stop updating them.

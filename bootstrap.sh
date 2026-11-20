@@ -88,14 +88,19 @@ fi
 # directory, so lazy.nvim writes lazy-lock.json into the repo for committing.
 # Pre-create lazygit's macOS config dir so its state.yml stays out of the repo.
 mkdir -p "$HOME/.config/mise" "$HOME/.config/zsh" "$HOME/.config/atuin" "$HOME/Library/Application Support/lazygit"
-stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship zsh atuin
-stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship zsh atuin
+stow --dir="$ROOT" --target="$HOME" --simulate --verbose=1 ghostty amethyst mise tmux nvim lazygit starship zsh atuin terraform
+stow --dir="$ROOT" --target="$HOME" ghostty amethyst mise tmux nvim lazygit starship zsh atuin terraform
 
 # Daily notes opened by the `dev` tmux layout (window 6: ~/Diary/YYYY-MM-DD.md).
 mkdir -p "$HOME/Diary"
 
 # Install the tools declared in ~/.config/mise/config.toml.
 "$mise_executable" install
+
+# Install the default Terraform from ~/.terraform-version (projects may pin
+# their own in .terraform-version). Run from $HOME so tfenv finds that file;
+# `mise exec` applies TFENV_CONFIG_DIR from the mise config.
+(cd "$HOME" && "$mise_executable" exec -- tfenv install)
 
 # Load the repo's zsh settings (aliases, completion) from the existing ~/.zshrc.
 zsh_line='[ -r "$HOME/.config/zsh/dotfiles.zsh" ] && source "$HOME/.config/zsh/dotfiles.zsh"'
