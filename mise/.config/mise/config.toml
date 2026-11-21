@@ -7,7 +7,7 @@ glab = "1.124.0"
 lazygit = "0.66.3"
 tmux = "3.7c"
 starship = "1.27.0"
-atuin = "18.23.0"
+atuin = "18.25.1"
 
 # Neovim + tools LazyVim relies on (search, file finding, treesitter parsers).
 neovim = "0.12.6"
