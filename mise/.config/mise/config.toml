@@ -24,7 +24,7 @@ sofka = "0.31.14"
 doctl = "1.186.0"
 
 # HashiCorp Vault CLI.
-vault = "2.2.1"
+vault = "2.2.2"
 
 # tfenv manages Terraform versions (reads .terraform-version per project).
 tfenv = "3.2.2"
