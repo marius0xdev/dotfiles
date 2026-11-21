@@ -30,7 +30,7 @@ vault = "2.2.1"
 tfenv = "3.2.2"
 
 # AWS CLI v2 (official AWS installer, bundles its own Python).
-aws-cli = "2.39.6"
+aws-cli = "2.42.1"
 
 # viddy: a modern `watch` (diffs, scrollable history of past runs).
 viddy = "1.3.1"
