@@ -2,7 +2,7 @@
 # Prefer mise over Homebrew; all of these install prebuilt binaries.
 # Versions are pinned exactly for reproducibility; bump them deliberately.
 [tools]
-gh = "2.103.3"
+gh = "2.106.0"
 glab = "1.124.0"
 lazygit = "0.66.3"
 tmux = "3.7c"
