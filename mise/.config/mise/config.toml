@@ -39,6 +39,10 @@ viddy = "1.3.1"
 # (artifacts) it writes, e.g. `node --check`.
 node = "26.13.1"
 
+# herdr: terminal multiplexer for coding agents (panes, detach/reattach, shows
+# which agent is working, blocked or idle).
+herdr = "0.9.5"
+
 # consul-template: not in mise's registry, and HashiCorp publishes binaries only
 # on releases.hashicorp.com, so download those directly. mise verifies the
 # checksums. Keep `version` right below the header (Renovate's regex expects it);
